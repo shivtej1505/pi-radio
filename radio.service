@@ -1,0 +1,13 @@
+[Unit]
+Description=Play internet radio on BLE speaker
+
+[Service]
+User=<user>
+Group=<group>
+Type=oneshot
+ExecStart=/path/to/radio.sh start
+ExecStop=/path/to/radio.sh stop
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
