@@ -33,23 +33,25 @@ connect_ble() {
 }
 
 next_radio_station() {
-	STREAM_URL=`cat stations | head -$RADIO_IDX | tail -1`;
 	RADIO_IDX=$((RADIO_IDX+1))
 	RADIO_IDX=$(($RADIO_IDX%$NUM_RADIO))
 
 	if [ $RADIO_IDX -eq 0 ]; then
 		RADIO_IDX=1
 	fi
+
+	STREAM_URL=`cat stations | head -$RADIO_IDX | tail -1`;
 }
 
 previous_radio_station() {
-	STREAM_URL=`cat stations | head -$RADIO_IDX | tail -1`;
 	RADIO_IDX=$((RADIO_IDX-1))
 	RADIO_IDX=$(($RADIO_IDX%$NUM_RADIO))
 
 	if [ $RADIO_IDX -eq 0 ]; then
 		RADIO_IDX=1
 	fi
+	
+	STREAM_URL=`cat stations | head -$RADIO_IDX | tail -1`;
 }
 
 start() {
@@ -68,7 +70,7 @@ start() {
 			fi
 
 			kill_process "$MPV_PID_FILE";
-			mpv -ao=pulse "$STREAM_URL" --volume=70 &
+			mpv -ao=pulse "$STREAM_URL" --volume=$VOLUME &
 			echo -n "$!" > $MPV_PID_FILE
 		fi
 
@@ -81,7 +83,7 @@ start() {
 
 			kill_process "$MPV_PID_FILE";
 			next_radio_station;
-			mpv -ao=pulse "$STREAM_URL" --volume=70 &
+			mpv -ao=pulse "$STREAM_URL" --volume=$VOLUME &
 			echo -n "$!" > $MPV_PID_FILE
 		fi
 
@@ -94,7 +96,7 @@ start() {
 
 			kill_process "$MPV_PID_FILE";
 			previous_radio_station;
-			mpv -ao=pulse "$STREAM_URL" --volume=70 &
+			mpv -ao=pulse "$STREAM_URL" --volume=$VOLUME &
 			echo -n "$!" > $MPV_PID_FILE
 		fi
 
